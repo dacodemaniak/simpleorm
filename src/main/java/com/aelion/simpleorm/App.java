@@ -22,14 +22,18 @@ public class App
     private void run() {
     	HeroController controller = new HeroController();
     	controller.findAll();
+    	
+    	/**
     	controller.byId(4);
     	controller.byId(2);
+    	**/
     	
     	Hero hero = new Hero();
-    	hero.setName("IronMan");
-    	hero.setAge(45);
-    	hero.setStrength(450);
+    	hero.setName("Dardevil");
+    	hero.setAge(30);
+    	hero.setStrength(300);
     	
     	controller.save(hero);
+    	
     }
 }

@@ -9,7 +9,7 @@ import com.aelion.simpleorm.repositories.IRepository;
 import com.aelion.simpleorm.repositories.HeroRepository;
 
 public class HeroService {
-	private IRepository<Hero> repository = new HeroRepository();
+	private IRepository<Hero> repository = new HeroRepository(com.aelion.simpleorm.models.Hero.class);
 	
 	public void findAll() {
 		try {

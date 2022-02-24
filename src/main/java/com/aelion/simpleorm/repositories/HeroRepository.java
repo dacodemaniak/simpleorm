@@ -9,19 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.aelion.simpleorm.annotations.Table;
 import com.aelion.simpleorm.dbal.DbConnect;
 import com.aelion.simpleorm.dbal.mysql.MySQLConnect;
 import com.aelion.simpleorm.models.Hero;
 
-public class HeroRepository implements IRepository<Hero> {
+public class HeroRepository extends Repository<Hero> implements IRepository<Hero> {
 	private DbConnect mysql;
 	private Connection cnx;
+	
 	
 	private PreparedStatement preparedFindById;
 	private PreparedStatement preparedInsert;
 	private PreparedStatement preparedUpdate;
 	
-	public HeroRepository() {
+	public HeroRepository(Class<Hero> className) {
+		super(className);
+		
 		this.mysql = MySQLConnect.getInstance();
 		
 		try {
@@ -31,8 +35,7 @@ public class HeroRepository implements IRepository<Hero> {
 			String query = "SELECT id, name, age, strength FROM hero WHERE id = ?;";
 			this.preparedFindById = this.cnx.prepareStatement(query);
 			
-			query = "INSERT INTO hero (name, age, strength) VALUES (?, ?, ?);";
-			this.preparedInsert = this.cnx.prepareStatement(query);
+			this.preparedInsert = this.cnx.prepareStatement(this.insert());
 			
 			query = "UPDATE hero SET name = ?, age = ?, strength = ? WHERE id = ?;";
 			this.preparedUpdate = this.cnx.prepareStatement(query);
@@ -46,9 +49,8 @@ public class HeroRepository implements IRepository<Hero> {
 	public List<Hero> findAll() {
 		try {
 			// Envoyer une requête de type SELECT * FROM hero;
-			String query = "SELECT id, name, age, strength FROM hero;";
 			Statement statement = this.cnx.createStatement();
-			ResultSet results = statement.executeQuery(query);
+			ResultSet results = statement.executeQuery(this.select());
 			
 			// Hydratation des modèles
 			ArrayList<Hero> heroes = new ArrayList<Hero>();
